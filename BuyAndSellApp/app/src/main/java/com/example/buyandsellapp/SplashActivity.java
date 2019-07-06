@@ -33,4 +33,10 @@ public class SplashActivity extends Activity {
         },1000);
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
 }

@@ -25,12 +25,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/content_productdesc"
-        android:layout_width="410dp"
-        android:layout_height="398dp"
-        android:layout_marginTop="28dp"
+    <EditText
+        android:id="@+id/inputProductName"
+        android:layout_width="124dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="244dp"
+        android:inputType="textMultiLine|text"
+        android:theme="@android:style/Theme.Light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
