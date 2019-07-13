@@ -30,7 +30,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(double price, String productName, String condition, String uid, String category) {
+    public Product( String productName,double price, String condition, String uid, String category) {
         this.price = price;
         this.productName = productName;
         this.condition = condition;

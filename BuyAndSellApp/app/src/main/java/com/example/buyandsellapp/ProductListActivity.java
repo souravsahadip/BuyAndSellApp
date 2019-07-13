@@ -86,7 +86,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(ProductListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(ProductListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                         //+adapter.getRef(1)
                         Intent intent = new Intent();
                         intent.setClass(ProductListActivity.this, ProductViewActivity.class);

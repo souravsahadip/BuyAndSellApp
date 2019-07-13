@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +20,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ProductViewActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,7 +35,10 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
     private TextView productPrice;
     private TextView productSeller;
     private Button buttonLogout;
+    private Button buttonAddtoCart;
     String productSellerName;
+    String productID;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +48,8 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
         Intent intent = getIntent();
-        productIDref = database.getReferenceFromUrl( intent.getStringExtra("productID"));
+        productID=intent.getStringExtra("productID");
+        productIDref = database.getReferenceFromUrl( productID);
         Log.d("productID",productIDref.toString());
 
         productName=(TextView)findViewById(R.id.productdescName);
@@ -87,7 +101,7 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
                         Log.e("onCancelled", " cancelled");
                     }
                 });
-                productSeller.setText(productSellerName);
+               // productSeller.setText(mRef.child("User").child( product.getUid()).child("fullName").getClass().toString());
                 //add location
             }
 
@@ -95,6 +109,36 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 Log.w("DatabaseError", "Failed to read value.", error.toException());
+            }
+        });
+
+
+        buttonAddtoCart= findViewById(R.id.buttonAddtocart);
+        buttonAddtoCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date currentTime = Calendar.getInstance().getTime();
+                mAuth = FirebaseAuth.getInstance();
+                CartItem cartItem= new CartItem(currentTime,productIDref.getKey(),mAuth.getUid());
+                mRef.child("Cart").push().setValue(cartItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(ProductViewActivity.this, "Added To Cart",
+                                Toast.LENGTH_SHORT).show();
+                        //Intent intent = new Intent();
+                        //intent.setClass(ProductViewActivity.this, ProductListActivity.class);
+                        //startActivity(intent);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ProductViewActivity.this, "Cannot add to cart",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             }
         });
     }

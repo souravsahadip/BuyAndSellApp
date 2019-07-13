@@ -28,6 +28,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
     private DatabaseReference mRef;
     private Button viewProductButton;
     private Button uploadProductButton;
+    private Button buttonLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,17 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
         uploadProductButton = findViewById(R.id.uploadProductButton);
         viewProductButton.setOnClickListener(this);
         uploadProductButton.setOnClickListener(this);
+        buttonLogout=findViewById(R.id.buttonLogout);
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("loggingout","loggingout");
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent();
+                intent.setClass(WelcomeScreenActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -61,7 +73,10 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
             intent.setClass(WelcomeScreenActivity.this, ProductListActivity.class);
             startActivity(intent);
         } else if (i == R.id.uploadProductButton) {
-
+            Intent intent = new Intent();
+            Log.d("clickeduploadProduct","clickeduploadProduct");
+            intent.setClass(WelcomeScreenActivity.this, ProductUploadActivity.class);
+            startActivity(intent);
         }
     }
 

@@ -121,6 +121,48 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             mPasswordField.setError(null);
         }
+
+        if (TextUtils.isEmpty(mFirstName.getText().toString())) {
+            mFirstName.setError("Required");
+            result = false;
+        } else {
+            mFirstName.setError(null);
+        }
+
+        if (TextUtils.isEmpty(mLastName.getText().toString())) {
+            mLastName.setError("Required");
+            result = false;
+        } else {
+            mLastName.setError(null);
+        }
+
+       if (TextUtils.isEmpty(mConfPasswordField.getText().toString())) {
+            mConfPasswordField.setError("Required");
+            result = false;
+        } else {
+            mConfPasswordField.setError(null);
+        }
+
+        if (!mConfPasswordField.getText().toString().equals(mConfPasswordField.getText().toString())) {
+            mConfPasswordField.setError("Password not matched");
+            result = false;
+        } else {
+            mConfPasswordField.setError(null);
+        }
+
+        if (TextUtils.isEmpty(mDistrict.getText().toString())) {
+            mDistrict.setError("Required");
+            result = false;
+        } else {
+            mDistrict.setError(null);
+        }
+
+        if (TextUtils.isEmpty(mDateofbirth.getText().toString())) {
+            mDateofbirth.setError("Required");
+            result = false;
+        } else {
+            mDateofbirth.setError(null);
+        }
         return result;
     }
 
@@ -129,19 +171,26 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         String username = usernameFromEmail(user.getEmail());
         String fullName= mFirstName.getText()+" "+mLastName.getText();
-        String district="Dhaka";
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+        String district=mDistrict.getText().toString();
+        SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd");
 
        String dateString = format.format(new Date());
-       Date dateOfBirth = format.parse("2010-12-04");
-        // Write new user
-        Log.d("creating","User Created");
-        writeNewUser(user.getUid(), username, user.getEmail(),fullName,district,dateOfBirth);
-        // Go to MainActivity
-        Log.d("userCreated","User Created");
-        Intent intent = new Intent();
-        intent.setClass(SignUpActivity.this, WelcomeScreenActivity.class);
-        startActivity(intent);
+
+       try{
+           Date dateOfBirth = format.parse(mDateofbirth.getText().toString());
+           // Write new user
+           Log.d("creating","User Created");
+           writeNewUser(user.getUid(), username, user.getEmail(),fullName,district,dateOfBirth);
+           // Go to MainActivity
+           Log.d("userCreated","User Created");
+           Intent intent = new Intent();
+           intent.setClass(SignUpActivity.this, WelcomeScreenActivity.class);
+           startActivity(intent);
+       }
+       catch (ParseException e){
+           e.printStackTrace();
+       }
+
         //finish();
     }
 
