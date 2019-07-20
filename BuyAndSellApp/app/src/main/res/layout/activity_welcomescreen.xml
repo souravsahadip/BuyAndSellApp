@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WelcomeScreenActivity">
+    tools:context=".WelcomeScreenActivity" >
+
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
-        android:layout_width="424dp"
-        android:layout_height="126dp"
+        android:layout_width="435dp"
+        android:layout_height="64dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <include
+            layout="@layout/logoutbutton"
+            android:layout_width="122dp"
+            android:layout_height="49dp" />
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+            android:layout_width="204dp"
             android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
@@ -49,21 +59,21 @@
         android:id="@+id/uploadProductButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:text="Upload a Product For Sell"
         app:layout_constraintStart_toStartOf="@+id/viewProductButton"
         app:layout_constraintTop_toBottomOf="@+id/viewProductButton" />
 
-    <include
-        layout="@layout/logoutbutton"
-        android:layout_width="122dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="84dp"
-        app:layout_constraintStart_toStartOf="parent"
+    <Button
+        android:id="@+id/buttonViewCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="View Your Cart"
+        app:layout_constraintStart_toStartOf="@+id/uploadProductButton"
         app:layout_constraintTop_toBottomOf="@+id/uploadProductButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
+</ScrollView>
 

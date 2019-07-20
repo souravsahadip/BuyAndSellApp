@@ -4,29 +4,23 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class CartItem {
-    private String productID;
-    private String uid;
+
     private Date timestamp;
+    private boolean status;
 
     public CartItem() {
     }
 
-    public CartItem(Date date, String productID, String uid) {
-        this.timestamp=date;
-        this.productID = productID;
-        this.uid = uid;
-    }
-
-
-    public String getProductID() {
-        return productID;
-    }
-
-    public String getUid() {
-        return uid;
+    public CartItem(Date timestamp, boolean status) {
+        this.timestamp = timestamp;
+        this.status = status;
     }
 
     public Date getTimestamp() {
         return timestamp;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 }

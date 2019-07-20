@@ -1,11 +1,18 @@
 package com.example.buyandsellapp;
 
+import android.net.Uri;
+
 public class Product {
     private double price;
     private String productName;
     private String condition;
     private String uid;
     private  String category;
+    private String imageuri;
+
+    public String getImageuri() {
+        return imageuri;
+    }
 
     public String getCategory() {
         return category;
@@ -30,11 +37,12 @@ public class Product {
     public Product() {
     }
 
-    public Product( String productName,double price, String condition, String uid, String category) {
+    public Product( String productName,double price, String condition, String uid, String category,String uri) {
         this.price = price;
         this.productName = productName;
         this.condition = condition;
         this.uid = uid;
         this.category = category;
+        this.imageuri=uri;
     }
 }

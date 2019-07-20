@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
+    private Button buttonLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +50,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private void fetch() {
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("Product");
+                .child("Product").orderByChild("productID");
         Log.d("fetch", "fetch");
         FirebaseRecyclerOptions<Product> options =
                 new FirebaseRecyclerOptions.Builder<Product>()
-                        /*   .setQuery(query, new SnapshotParser<Product>() {
-                               @NonNull
-                               @Override
-                               public Product parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                   return new Product
-                                           (Double.parseDouble(snapshot.child("price").getValue().toString()),
-                                                   snapshot.child("ProductName").getValue().toString(),
-                                                   snapshot.child("condition").getValue().toString(),
-                                                   snapshot.child("uid").getValue().toString(),
-                                                   snapshot.child("Category").getValue().toString());
-                               }
-                           })*/
                         .setQuery(query, Product.class)
                         .build();
         Log.d("beforeAdapter", "beforeAdapter");
@@ -78,8 +68,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
 
             @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, Product model) {
+            protected void onBindViewHolder(final ViewHolder holder, final int position, Product model) {
                 Log.d("insideAdapter", "insideAdapter");
+
                 holder.setTxtTitle(model.getProductName());
                 holder.setTxtDesc(model.getCategory());
 
@@ -88,9 +79,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                     public void onClick(View view) {
                       //  Toast.makeText(ProductListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                         //+adapter.getRef(1)
+                        Log.d("ClickedOn",Integer.toString(holder.getAdapterPosition()));
                         Intent intent = new Intent();
                         intent.setClass(ProductListActivity.this, ProductViewActivity.class);
-                        intent.putExtra("productID",adapter.getRef(position).toString());
+                        intent.putExtra("productID",adapter.getRef(holder.getAdapterPosition()).toString());
                         startActivity(intent);
                     }
                 });
@@ -100,6 +92,18 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         };
         adapter.startListening();
         recyclerView.setAdapter(adapter);
+
+        buttonLogout = findViewById(R.id.buttonLogout);
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("loggingout", "loggingout");
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent();
+                intent.setClass(ProductListActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onStart() {
@@ -157,5 +161,10 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setClass(ProductListActivity.this, WelcomeScreenActivity.class);
+        startActivity(intent);
     }
 }

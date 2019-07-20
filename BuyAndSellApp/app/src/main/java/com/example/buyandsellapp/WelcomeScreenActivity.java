@@ -29,6 +29,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
     private Button viewProductButton;
     private Button uploadProductButton;
     private Button buttonLogout;
+    private Button buttonViewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,17 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent();
                 intent.setClass(WelcomeScreenActivity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonViewCart=findViewById(R.id.buttonViewCart);
+        buttonViewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("buttonViewCart","buttonViewCart");
+                Intent intent = new Intent();
+                intent.setClass(WelcomeScreenActivity.this,CartListActivity.class);
                 startActivity(intent);
             }
         });

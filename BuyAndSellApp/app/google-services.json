@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "202016945371-d9ciqo054jkrves2sgisfauujsn83nul.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.buyandsellapp",
+            "certificate_hash": "5e31fd1a618e6dd23adddcd7aa01964fcf5edecc"
+          }
+        },
+        {
           "client_id": "202016945371-lf32cqelcjkqp05bg1b8r98snc6audeo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -14,6 +14,10 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <include
+            layout="@layout/logoutbutton"
+            android:layout_width="122dp"
+            android:layout_height="49dp" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"

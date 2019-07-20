@@ -6,9 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProductUploadActivity">
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/coordinatorLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -24,17 +22,23 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
-        android:layout_width="410dp"
-        android:layout_height="64dp"
+        android:layout_width="411dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <include
+            layout="@layout/logoutbutton"
+            android:layout_width="122dp"
+            android:layout_height="49dp" />
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="210dp"
+            android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -109,18 +113,35 @@
         android:id="@+id/buttonUploadProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="16dp"
         android:text="upload"
-        app:layout_constraintEnd_toEndOf="@+id/inputProductCondition"
-        app:layout_constraintTop_toBottomOf="@+id/inputProductCondition" />
+        app:layout_constraintStart_toStartOf="@+id/btnChoose"
+        app:layout_constraintTop_toBottomOf="@+id/btnChoose" />
 
-    <include
-        layout="@layout/logoutbutton"
-        android:layout_width="122dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="127dp"
+        android:layout_height="57dp"
+        app:layout_constraintStart_toStartOf="@+id/inputProductCondition"
+        app:layout_constraintTop_toTopOf="@+id/textView17" />
+
+    <Button
+        android:id="@+id/btnChoose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:text="Choose"
+        app:layout_constraintEnd_toEndOf="@+id/imgView"
+        app:layout_constraintTop_toBottomOf="@+id/imgView" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="110dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="56dp"
+        android:text="Choose a Picture:"
         app:layout_constraintStart_toStartOf="@+id/textView15"
-        app:layout_constraintTop_toBottomOf="@+id/buttonUploadProduct" />
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
