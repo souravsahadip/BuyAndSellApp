@@ -11,15 +11,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/inputProductCondition"
-        android:layout_width="124dp"
-        android:layout_height="50dp"
-        android:inputType="text"
-        android:theme="@android:style/Theme.Light"
-        app:layout_constraintStart_toStartOf="@+id/inputProducCategory"
-        app:layout_constraintTop_toTopOf="@+id/textView15" />
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="411dp"
@@ -53,15 +44,6 @@
         android:theme="@android:style/Theme.Light"
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toTopOf="@+id/textView10" />
-
-    <EditText
-        android:id="@+id/inputProducCategory"
-        android:layout_width="124dp"
-        android:layout_height="50dp"
-        android:inputType="text"
-        android:theme="@android:style/Theme.Light"
-        app:layout_constraintStart_toStartOf="@+id/inputProductPrice"
-        app:layout_constraintTop_toTopOf="@+id/textView16" />
 
     <EditText
         android:id="@+id/inputProductPrice"
@@ -122,7 +104,7 @@
         android:id="@+id/imgView"
         android:layout_width="127dp"
         android:layout_height="57dp"
-        app:layout_constraintStart_toStartOf="@+id/inputProductCondition"
+        app:layout_constraintStart_toStartOf="@+id/spinner2"
         app:layout_constraintTop_toTopOf="@+id/textView17" />
 
     <Button
@@ -143,5 +125,23 @@
         android:text="Choose a Picture:"
         app:layout_constraintStart_toStartOf="@+id/textView15"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="157dp"
+        android:layout_height="46dp"
+        android:entries="@array/category_arrays"
+        android:prompt="@string/category_prompt"
+        app:layout_constraintStart_toStartOf="@+id/inputProductPrice"
+        app:layout_constraintTop_toTopOf="@+id/textView16" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="157dp"
+        android:layout_height="46dp"
+        android:entries="@array/condition_arrays"
+        android:prompt="@string/condition_prompt"
+        app:layout_constraintStart_toStartOf="@+id/spinner1"
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

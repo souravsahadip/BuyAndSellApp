@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +43,7 @@ public class ProductUploadActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private TextView productName;
     private TextView productPrice;
-    private TextView productCategory;
-    private TextView productCondition;
+    private  Spinner spinner1,spinner2 ;
     private Button buttonLogout;
     private Button buttonProductUpload;
     String productSellerName;
@@ -72,8 +72,10 @@ public class ProductUploadActivity extends AppCompatActivity {
         uid = mAuth.getUid();
         productName = (TextView) findViewById(R.id.inputProductName);
         productPrice = (TextView) findViewById(R.id.inputProductPrice);
-        productCategory = (TextView) findViewById(R.id.inputProducCategory);
-        productCondition = (TextView) findViewById(R.id.inputProductCondition);
+        addListenerOnButton();
+        addListenerOnSpinnerItemSelection();
+       // productCategory = (TextView) findViewById(R.id.inputProducCategory);
+        //productCondition = (TextView) findViewById(R.id.inputProductCondition);
 
         buttonProductUpload = findViewById(R.id.buttonUploadProduct);
         btnChoose = (Button) findViewById(R.id.btnChoose);
@@ -105,14 +107,15 @@ public class ProductUploadActivity extends AppCompatActivity {
                                     //create data
                                     Product product = new Product(productName.getText().toString(),
                                             Double.parseDouble(productPrice.getText().toString()),
-                                            productCondition.getText().toString(), uid,
-                                            productCategory.getText().toString(),uri.toString());
+                                            String.valueOf(spinner2.getSelectedItem()), uid,
+                                            String.valueOf(spinner1.getSelectedItem()),uri.toString());
 
                                     mRef.child(productID).setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Intent intent = new Intent();
-                                            intent.setClass(ProductUploadActivity.this, WelcomeScreenActivity.class);
+                                            intent.setClass(ProductUploadActivity.this, ConfirmationActivity.class);
+                                            intent.putExtra("message","Product Uploaded Successfully");
                                             startActivity(intent);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -195,7 +198,19 @@ public class ProductUploadActivity extends AppCompatActivity {
         }
     }
 
+    public void addListenerOnSpinnerItemSelection() {
+        spinner1 = (Spinner) findViewById(R.id.spinner1);
+        spinner1.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
+        spinner2.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+    }
 
+    public void addListenerOnButton() {
+
+        spinner1 = (Spinner) findViewById(R.id.spinner1);
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
+
+    }
     public void onStart() {
         super.onStart();
         // Check auth on Activity start
@@ -218,19 +233,20 @@ public class ProductUploadActivity extends AppCompatActivity {
             productName.setError(null);
         }
 
-        if (TextUtils.isEmpty(productCategory.getText().toString())) {
-            productCategory.setError("Required");
+        if (TextUtils.isEmpty(String.valueOf(spinner1.getSelectedItem()))) {
+            //spinner1.setError("Required");
             result = false;
         } else {
-            productCategory.setError(null);
+           // productCategory.setError(null);
         }
 
-        if (TextUtils.isEmpty(productCondition.getText().toString())) {
-            productCondition.setError("Required");
+        if (TextUtils.isEmpty(String.valueOf(spinner2.getSelectedItem()))) {
+            //spinner2.setError("Required");
             result = false;
         } else {
-            productCondition.setError(null);
+            // productCategory.setError(null);
         }
+
 
         if (TextUtils.isEmpty(productPrice.getText().toString())) {
             productPrice.setError("Required");
