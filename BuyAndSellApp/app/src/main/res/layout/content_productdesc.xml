@@ -59,12 +59,12 @@
             app:layout_constraintTop_toTopOf="@+id/textView13" />
 
         <Button
-            android:id="@+id/buttonAddtocart"
+            android:id="@+id/buttonAddtoWishlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="116dp"
-            android:text="Add To Cart"
+            android:text="Add To Wishlist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/productdescSeller" />
 
@@ -93,7 +93,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="84dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAddtocart" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddtoWishlist" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

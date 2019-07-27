@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,14 +23,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import customfonts.MyTextView;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private EditText mEmailField;
     private EditText mPasswordField;
-    private Button mSignInButton;
-    private Button mSignUpButton;
+    private MyTextView mSignInButton;
+    private TextView mSignUpButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,103 +40,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mDatabase = database.getReference();
         mAuth = FirebaseAuth.getInstance();
-       // mAuth.createUserWithEmailAndPassword("abc@gmail.com", "122345");
-       // mAuth.signOut();
-        mEmailField = (EditText) findViewById(R.id.fieldEmail);
-        mPasswordField = (EditText) findViewById(R.id.fieldPassword);
-        mSignInButton = (Button) findViewById(R.id.buttonSignIn);
-        mSignUpButton = (Button) findViewById(R.id.buttonSignUp);
+        mSignInButton =  (MyTextView)findViewById(R.id.mSignInButton);
+        mSignUpButton =  (TextView) findViewById(R.id.mSignUpButton);
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
     }
 
-    private void signIn() {
-        if (!validateForm()) {
-            return;
-        }
-
-        String email = mEmailField.getText().toString();
-        String password = mPasswordField.getText().toString();
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
-                        } else {
-                            Toast.makeText(MainActivity.this, "Sign In Failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.buttonSignIn) {
-            signIn();
-        } else if (i == R.id.buttonSignUp) {
+        if (i == R.id.mSignInButton) {
+            if (mAuth.getCurrentUser() != null){
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, WelcomeScreenActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, SignInActivity.class);
+                startActivity(intent);
+            }
+
+        } else if (i == R.id.mSignUpButton) {
+            FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, SignUpActivity.class);
             startActivity(intent);
         }
     }
 
-    private void onAuthSuccess(FirebaseUser user) {
-        Log.d("OnAuth",user.getEmail());
 
-        String username = usernameFromEmail(user.getEmail());
-        // Write new user
-       // writeNewUser(user.getUid(), username, user.getEmail());
-        // Go to MainActivity
-        Intent intent = new Intent();
-        intent.setClass(MainActivity.this, WelcomeScreenActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
     public void onStart() {
         super.onStart();
-        // Check auth on Activity start
-        if (mAuth.getCurrentUser() != null) {
-            onAuthSuccess(mAuth.getCurrentUser());
-            Log.d("Start","started");
-        }
-    }
-    private String usernameFromEmail(String email) {
 
-        if (email.contains("@")) {
-            return email.split("@")[0];
-        } else {
-            return email;
-        }
     }
 
-    private boolean validateForm() {
 
-        boolean result = true;
-        if (TextUtils.isEmpty(mEmailField.getText().toString())) {
-            mEmailField.setError("Required");
-            result = false;
-        } else {
-            mEmailField.setError(null);
-        }
-
-        if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
-            mPasswordField.setError("Required");
-            result = false;
-        } else {
-            mPasswordField.setError(null);
-        }
-        return result;
-    }
-
-    private void writeNewUser(String userId, String name, String email) {
-       // User user = new User(name, email,);
-        //mDatabase.child("users").child(userId).setValue(user);
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

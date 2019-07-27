@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ProductListActivity">
+    tools:context=".ProductCategoryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout3"
@@ -25,36 +25,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="85dp">
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="139dp"
-            android:layout_height="32dp"
-            android:layout_margin="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:text="Choose a Category:" />
-
-        <Spinner
-            android:id="@+id/spinner1"
-            android:layout_width="136dp"
-            android:layout_height="55dp"
-            android:entries="@array/category_arrays"
-            android:prompt="@string/category_prompt" />
-
-        <Button
-            android:id="@+id/buttonFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="58dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:text="Apply Filter" />
-
-    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -73,6 +43,7 @@
                 android:id="@+id/productListView"
                 android:layout_width="404dp"
                 android:layout_height="575dp"
+                android:layout_marginTop="48dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 

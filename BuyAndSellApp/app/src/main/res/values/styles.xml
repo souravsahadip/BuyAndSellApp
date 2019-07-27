@@ -11,6 +11,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+	<style name="buttonStyle" parent="TextAppearance.AppCompat">
+        <item name="android:background">@drawable/angle</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:fontFamily">monospace</item>
+    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,16 +15,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -30,13 +31,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ProductViewActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProductViewActivity extends BaseActivity implements View.OnClickListener {
 
     private DatabaseReference mRef;
     private DatabaseReference productIDref;
@@ -44,7 +42,7 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
     private TextView productPrice;
     private TextView productSeller;
     private Button buttonLogout;
-    private Button buttonAddtoCart;
+    private Button buttonAddtoWishlist;
     String productSellerName;
     String productID;
     FirebaseAuth mAuth;
@@ -57,6 +55,8 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productdesc);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
         mstorageRef= FirebaseStorage.getInstance().getReference();
@@ -153,8 +153,8 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
         });
 
 
-        buttonAddtoCart = findViewById(R.id.buttonAddtocart);
-        buttonAddtoCart.setOnClickListener(new View.OnClickListener() {
+        buttonAddtoWishlist = findViewById(R.id.buttonAddtoWishlist);
+        buttonAddtoWishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                // Query query = mRef.child("Cart").orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid()) ;
@@ -166,14 +166,14 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
                     mAuth = FirebaseAuth.getInstance();
                     //CartItem cartItem = new CartItem(currentTime, productIDref.getKey(), mAuth.getUid());
 
-                    mRef.child("Cart").child(FirebaseAuth.getInstance().getUid())
+                    mRef.child("Wishlist").child(FirebaseAuth.getInstance().getUid())
                             .child(productIDref.getKey()).setValue(productName.getText()).
                    // .push().setValue(productIDref.getKey()).
                             addOnSuccessListener(new OnSuccessListener<Void>() {
 
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(ProductViewActivity.this, "Added To Cart",
+                            Toast.makeText(ProductViewActivity.this, "Added To Wishlist",
                                     Toast.LENGTH_SHORT).show();
                             //Intent intent = new Intent();
                             //intent.setClass(ProductViewActivity.this, ProductListActivity.class);
@@ -182,7 +182,7 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ProductViewActivity.this, "Cannot add to cart",
+                            Toast.makeText(ProductViewActivity.this, "Cannot add to Wishlist",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -214,5 +214,16 @@ public class ProductViewActivity extends AppCompatActivity implements View.OnCli
         Intent intent = new Intent();
         intent.setClass(ProductViewActivity.this, ProductListActivity.class);
         startActivity(intent);
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        return true;
     }
 }

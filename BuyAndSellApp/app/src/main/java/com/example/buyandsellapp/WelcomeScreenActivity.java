@@ -10,11 +10,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import android.widget.*;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class WelcomeScreenActivity extends AppCompatActivity implements View.OnClickListener {
+public class WelcomeScreenActivity extends BaseActivity implements View.OnClickListener {
 
     private DatabaseReference mRef;
     private Button viewProductButton;
@@ -36,6 +38,10 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcomescreen);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
         viewProductButton= findViewById(R.id.viewProductButton);
@@ -60,7 +66,7 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
             public void onClick(View view) {
                 Log.d("buttonViewCart","buttonViewCart");
                 Intent intent = new Intent();
-                intent.setClass(WelcomeScreenActivity.this,CartListActivity.class);
+                intent.setClass(WelcomeScreenActivity.this,WishListActivity.class);
                 startActivity(intent);
             }
         });
@@ -92,17 +98,18 @@ public class WelcomeScreenActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+         super.onOptionsItemSelected(item);
+        return true;
+    }
+
 }

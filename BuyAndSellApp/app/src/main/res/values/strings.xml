@@ -11,6 +11,7 @@
         <item>Mobile Phone </item>
         <item>Furnitures</item>
         <item>Accessories</item>
+        <item>Clothes</item>
     </string-array>
 	<string-array name="condition_arrays">
         <item>Old</item>

@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,51 +23,33 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-public class ProductListActivity extends AppCompatActivity implements View.OnClickListener {
+public class UploadedProductListActivity extends ProductListActivity implements View.OnClickListener {
 
     private DatabaseReference mRef;
     ListView listView;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
-    private Spinner spinner1;
-    private Button buttonFilter;
-    private Query query;
+    private Button buttonLogout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productlist);
-        addListenerOnButton();
-        addListenerOnSpinnerItemSelection();
-        buttonFilter=findViewById(R.id.buttonFilter);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference().child("Product");
         recyclerView = findViewById(R.id.productListView);
-        linearLayoutManager = new LinearLayoutManager(ProductListActivity.this);
+        linearLayoutManager = new LinearLayoutManager(UploadedProductListActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //recyclerView.setHasFixedSize(true);
-
-        query = FirebaseDatabase.getInstance()
-                .getReference()
-                //.child("Product").orderByChild("uid");
-                .child("Product").orderByChild(FirebaseAuth.getInstance().getUid()).equalTo(null);
-
-        buttonFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                query = FirebaseDatabase.getInstance().getReference()
-                        .child("Product").orderByChild("category")
-                        .equalTo(String.valueOf(spinner1.getSelectedItem()));
-                fetch();
-            }
-        });
         fetch();
-
     }
 
     private void fetch() {
-
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Product").orderByChild("uid").equalTo(FirebaseAuth.getInstance().getUid());
         Log.d("fetch", "fetch");
         FirebaseRecyclerOptions<Product> options =
                 new FirebaseRecyclerOptions.Builder<Product>()
@@ -96,11 +76,12 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        Log.d("ClickedOn", Integer.toString(holder.getAdapterPosition()));
+                      //  Toast.makeText(ProductListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                        //+adapter.getRef(1)
+                        Log.d("ClickedOn",Integer.toString(holder.getAdapterPosition()));
                         Intent intent = new Intent();
-                        intent.setClass(ProductListActivity.this, ProductViewActivity.class);
-                        intent.putExtra("productID", adapter.getRef(holder.getAdapterPosition()).toString());
+                        intent.setClass(UploadedProductListActivity.this, ProductViewActivity.class);
+                        intent.putExtra("productID",adapter.getRef(holder.getAdapterPosition()).toString());
                         startActivity(intent);
                     }
                 });
@@ -170,19 +151,9 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void addListenerOnSpinnerItemSelection() {
-        spinner1 = (Spinner) findViewById(R.id.spinner1);
-        spinner1.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-    }
-
-    public void addListenerOnButton() {
-        spinner1 = (Spinner) findViewById(R.id.spinner1);
-    }
-
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.setClass(ProductListActivity.this, WelcomeScreenActivity.class);
+        intent.setClass(UploadedProductListActivity.this, WelcomeScreenActivity.class);
         startActivity(intent);
     }
 }

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,21 +24,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import customfonts.MyEditText;
-import customfonts.MyTextView;
-
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    private MyEditText mEmailField;
-    private MyEditText mPasswordField;
-    private MyEditText mFirstName;
-    private MyEditText mLastName;
-    private MyEditText mDistrict;
-    private MyEditText mConfPasswordField;
-    private DatePicker mDateofbirth;
-    private MyTextView mSignUpButton;
+    private EditText mEmailField;
+    private EditText mPasswordField;
+    private EditText mFirstName;
+    private EditText mLastName;
+    private EditText mDistrict;
+    private EditText mConfPasswordField;
+    private EditText mDateofbirth;
+    private Button mSignUpButton;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +47,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
        // Log.d("mauth:",mAuth.getUid().toString());
 
         mSignUpButton=findViewById(R.id.buttonSignUp);
-        mEmailField = (MyEditText) findViewById(R.id.fieldEmail);
-        mPasswordField = (MyEditText) findViewById(R.id.fieldPassword);
-        mConfPasswordField = (MyEditText) findViewById(R.id.fieldConfirmpwd);
-        mFirstName = (MyEditText) findViewById(R.id.firstName);
-        mLastName = (MyEditText) findViewById(R.id.lastName);
-        mDistrict = (MyEditText) findViewById(R.id.district);
-        mDateofbirth = (DatePicker) findViewById(R.id.dateofbirth);
+        mEmailField = (EditText) findViewById(R.id.fieldEmail);
+        mPasswordField = (EditText) findViewById(R.id.fieldPassword);
+        mConfPasswordField = (EditText) findViewById(R.id.fieldConfirmpwd);
+        mFirstName = (EditText) findViewById(R.id.firstName);
+        mLastName = (EditText) findViewById(R.id.LastName);
+        mDistrict = (EditText) findViewById(R.id.district);
+        mDateofbirth = (EditText) findViewById(R.id.dateofbirth);
 
         mSignUpButton.setOnClickListener(this);
     }
@@ -102,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                 e.printStackTrace();
                             }
                         } else {
-                            Toast.makeText(SignUpActivity.this, "Sign Up Failed",
+                            Toast.makeText(ProfileActivity.this, "Sign Up Failed",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -161,9 +157,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mDistrict.setError(null);
         }
 
-        if (TextUtils.isEmpty(mDateofbirth.toString())) {
+        if (TextUtils.isEmpty(mDateofbirth.getText().toString())) {
+            mDateofbirth.setError("Required");
             result = false;
         } else {
+            mDateofbirth.setError(null);
         }
         return result;
     }
@@ -179,15 +177,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
        String dateString = format.format(new Date());
 
        try{
-           Date dateOfBirth = format.parse(mDateofbirth.getDayOfMonth()+"/"+
-                   mDateofbirth.getMonth()+"/"+mDateofbirth.getYear());
+           Date dateOfBirth = format.parse(mDateofbirth.getText().toString());
            // Write new user
            Log.d("creating","User Created");
            writeNewUser(user.getUid(), username, user.getEmail(),fullName,district,dateOfBirth);
            // Go to MainActivity
            Log.d("userCreated","User Created");
            Intent intent = new Intent();
-           intent.setClass(SignUpActivity.this, WelcomeScreenActivity.class);
+           intent.setClass(ProfileActivity.this, WelcomeScreenActivity.class);
            startActivity(intent);
        }
        catch (ParseException e){
@@ -211,10 +208,5 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mDatabase.child("User").child(userId).setValue(user);
     }
 
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        intent.setClass(SignUpActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
 
 }

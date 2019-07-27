@@ -109,10 +109,10 @@ public class ProductUploadActivity extends AppCompatActivity {
                                             Double.parseDouble(productPrice.getText().toString()),
                                             String.valueOf(spinner2.getSelectedItem()), uid,
                                             String.valueOf(spinner1.getSelectedItem()),uri.toString());
-
                                     mRef.child(productID).setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            mRef.child(productID).child(uid).setValue(true);
                                             Intent intent = new Intent();
                                             intent.setClass(ProductUploadActivity.this, ConfirmationActivity.class);
                                             intent.putExtra("message","Product Uploaded Successfully");
@@ -125,8 +125,6 @@ public class ProductUploadActivity extends AppCompatActivity {
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     });
-
-
                                 }
                             });
 
