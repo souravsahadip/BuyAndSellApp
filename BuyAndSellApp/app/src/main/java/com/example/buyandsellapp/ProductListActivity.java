@@ -35,6 +35,8 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
     private Spinner spinner1;
     private Button buttonFilter;
     private Query query;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -42,30 +44,33 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_productlist);
         addListenerOnButton();
         addListenerOnSpinnerItemSelection();
-        buttonFilter=findViewById(R.id.buttonFilter);
+        buttonFilter = findViewById(R.id.buttonFilter);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference().child("Product");
+        mAuth = FirebaseAuth.getInstance();
         recyclerView = findViewById(R.id.productListView);
         linearLayoutManager = new LinearLayoutManager(ProductListActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //recyclerView.setHasFixedSize(true);
+        try {
+            query = FirebaseDatabase.getInstance()
+                    .getReference()
+                    //.child("Product").orderByChild("uid");
+                    .child("Product").orderByChild(FirebaseAuth.getInstance().getUid()).equalTo(null);
 
-        query = FirebaseDatabase.getInstance()
-                .getReference()
-                //.child("Product").orderByChild("uid");
-                .child("Product").orderByChild(FirebaseAuth.getInstance().getUid()).equalTo(null);
-
-        buttonFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                query = FirebaseDatabase.getInstance().getReference()
-                        .child("Product").orderByChild("category")
-                        .equalTo(String.valueOf(spinner1.getSelectedItem()));
-                fetch();
-            }
-        });
-        fetch();
-
+            buttonFilter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    query = FirebaseDatabase.getInstance().getReference()
+                            .child("Product").orderByChild("category")
+                            .equalTo(String.valueOf(spinner1.getSelectedItem()));
+                    fetch();
+                }
+            });
+            fetch();
+        } catch (Exception e) {
+            Log.e("null", e.toString());
+        }
     }
 
     private void fetch() {
@@ -88,23 +93,24 @@ public class ProductListActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             protected void onBindViewHolder(final ViewHolder holder, final int position, Product model) {
-                Log.d("insideAdapter", "insideAdapter");
+                if(model.getUid().equals(mAuth.getUid())==false){
+                    Log.d("insideAdapter", "insideAdapter");
 
-                holder.setTxtTitle(model.getProductName());
-                holder.setTxtDesc(model.getCategory());
+                    holder.setTxtTitle(model.getProductName());
+                    holder.setTxtDesc(model.getCategory());
 
-                holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    holder.root.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
-                        Log.d("ClickedOn", Integer.toString(holder.getAdapterPosition()));
-                        Intent intent = new Intent();
-                        intent.setClass(ProductListActivity.this, ProductViewActivity.class);
-                        intent.putExtra("productID", adapter.getRef(holder.getAdapterPosition()).toString());
-                        startActivity(intent);
-                    }
-                });
-
+                            Log.d("ClickedOn", Integer.toString(holder.getAdapterPosition()));
+                            Intent intent = new Intent();
+                            intent.setClass(ProductListActivity.this, ProductViewActivity.class);
+                            intent.putExtra("productID", adapter.getRef(holder.getAdapterPosition()).toString());
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
         };

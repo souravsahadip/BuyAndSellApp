@@ -43,7 +43,7 @@ public class ProductUploadActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private TextView productName;
     private TextView productPrice;
-    private  Spinner spinner1,spinner2 ;
+    private Spinner spinner1, spinner2;
     private Button buttonLogout;
     private Button buttonProductUpload;
     String productSellerName;
@@ -74,7 +74,7 @@ public class ProductUploadActivity extends AppCompatActivity {
         productPrice = (TextView) findViewById(R.id.inputProductPrice);
         addListenerOnButton();
         addListenerOnSpinnerItemSelection();
-       // productCategory = (TextView) findViewById(R.id.inputProducCategory);
+        // productCategory = (TextView) findViewById(R.id.inputProducCategory);
         //productCondition = (TextView) findViewById(R.id.inputProductCondition);
 
         buttonProductUpload = findViewById(R.id.buttonUploadProduct);
@@ -108,14 +108,14 @@ public class ProductUploadActivity extends AppCompatActivity {
                                     Product product = new Product(productName.getText().toString(),
                                             Double.parseDouble(productPrice.getText().toString()),
                                             String.valueOf(spinner2.getSelectedItem()), uid,
-                                            String.valueOf(spinner1.getSelectedItem()),uri.toString());
-                                    mRef.child(productID).setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            String.valueOf(spinner1.getSelectedItem()), uri.toString());
+                                            mRef.child(productID).setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             mRef.child(productID).child(uid).setValue(true);
                                             Intent intent = new Intent();
                                             intent.setClass(ProductUploadActivity.this, ConfirmationActivity.class);
-                                            intent.putExtra("message","Product Uploaded Successfully");
+                                            intent.putExtra("message", "Product Uploaded Successfully");
                                             startActivity(intent);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -209,6 +209,7 @@ public class ProductUploadActivity extends AppCompatActivity {
         spinner2 = (Spinner) findViewById(R.id.spinner2);
 
     }
+
     public void onStart() {
         super.onStart();
         // Check auth on Activity start
@@ -235,7 +236,7 @@ public class ProductUploadActivity extends AppCompatActivity {
             //spinner1.setError("Required");
             result = false;
         } else {
-           // productCategory.setError(null);
+            // productCategory.setError(null);
         }
 
         if (TextUtils.isEmpty(String.valueOf(spinner2.getSelectedItem()))) {

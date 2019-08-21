@@ -25,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import customfonts.MyTextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText mPasswordField;
     private MyTextView mSignInButton;
     private TextView mSignUpButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mDatabase = database.getReference();
         mAuth = FirebaseAuth.getInstance();
-        mSignInButton =  (MyTextView)findViewById(R.id.mSignInButton);
-        mSignUpButton =  (TextView) findViewById(R.id.mSignUpButton);
+        mSignInButton = (MyTextView) findViewById(R.id.mSignInButton);
+        mSignUpButton = (TextView) findViewById(R.id.mSignUpButton);
         mSignInButton.setOnClickListener(this);
         mSignUpButton.setOnClickListener(this);
     }
@@ -51,12 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.mSignInButton) {
-            if (mAuth.getCurrentUser() != null){
+            if (mAuth.getCurrentUser() != null) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, WelcomeScreenActivity.class);
                 startActivity(intent);
-            }
-            else{
+            } else {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, SignInActivity.class);
                 startActivity(intent);
@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
     }
-
 
 
     public void onStart() {
@@ -91,6 +90,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 }

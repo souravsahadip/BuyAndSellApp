@@ -4,21 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.ObservableSnapshotArray;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,9 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
-
-public class CartListActivity extends AppCompatActivity implements View.OnClickListener {
+public class CartListActivity extends BaseActivity implements View.OnClickListener {
 
     private DatabaseReference mRef;
     ListView listView;
@@ -37,18 +36,29 @@ public class CartListActivity extends AppCompatActivity implements View.OnClickL
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
     String productName;
+    private Button buttonCheckout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cartlist);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference().child("Cart");
         recyclerView = findViewById(R.id.cartListView);
         linearLayoutManager = new LinearLayoutManager(CartListActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
         fetch();
+        buttonCheckout=findViewById(R.id.buttonCheckout);
+        buttonCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     private void fetch() {
@@ -57,14 +67,7 @@ public class CartListActivity extends AppCompatActivity implements View.OnClickL
                 .child(FirebaseAuth.getInstance().getUid());
 
         Log.d("fetch", "fetch");
-        /*ObservableSnapshotArray<String> snaps=new ObservableSnapshotArray<String>() {
-            @NonNull
-            @Override
-            protected List<DataSnapshot> getSnapshots() {
-                return null;
-            }
-        };*/
-        //Iterable<DataSnapshot> contactChildren = contactSnapshot.getChildren();
+
         FirebaseRecyclerOptions<String> options =
                 new FirebaseRecyclerOptions.Builder<String>()
                         .setQuery(query, String.class)
@@ -118,43 +121,22 @@ public class CartListActivity extends AppCompatActivity implements View.OnClickL
                         });
 
 
-                /*FirebaseDatabase.getInstance().getReference().child("Product").
-                        child(model).child("productName").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        try {
-                            if (snapshot.getValue() != null) {
-                                try {
-                                    Log.e("productName", "" + snapshot.getValue()); // your name values you will get here
-                                    productName = snapshot.getValue().toString();
-                                    holder.setTxtTitle(productName);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                Log.e("TAG", " it's null.");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError firebaseError) {
-                        Log.e("onCancelled", " cancelled");
-                    }
-                });
-                */
 
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //  Toast.makeText(ProductListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                         //+adapter.getRef(1)
-                        //Intent intent = new Intent();
-                        //intent.setClass(CartListActivity.this, ProductViewActivity.class);
-                        //intent.putExtra("productID",adapter.getRef(holder.getAdapterPosition()).toString());
-                        //startActivity(intent);
+                        Intent intent = new Intent();
+                        intent.setClass(CartListActivity.this, ProductViewActivity.class);
+                        String cartRef=adapter.getRef(holder.getAdapterPosition()).toString();
+                        String[] refs=cartRef.split("/");
+                        Log.d("prodRef",refs[refs.length-1]);
+                        DatabaseReference prodRef=FirebaseDatabase.getInstance().getReference()
+                                .child("Product").child(refs[refs.length-1]);
+                        intent.putExtra("productID",prodRef.toString());
+                        startActivity(intent);
                     }
                 });
 
@@ -208,20 +190,17 @@ public class CartListActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        return true;
+    }
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();

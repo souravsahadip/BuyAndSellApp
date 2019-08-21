@@ -143,5 +143,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         return super.onOptionsItemSelected(item);
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setClass(SignInActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
 
 }

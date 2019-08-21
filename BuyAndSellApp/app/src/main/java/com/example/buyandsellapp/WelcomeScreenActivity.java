@@ -1,25 +1,16 @@
 package com.example.buyandsellapp;
 
-import android.app.usage.NetworkStats;
 import android.os.Bundle;
 import android.content.Intent;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.*;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.*;
 
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +22,9 @@ public class WelcomeScreenActivity extends BaseActivity implements View.OnClickL
     private Button viewProductButton;
     private Button uploadProductButton;
     private Button buttonLogout;
+    private Button buttonViewWishlist;
     private Button buttonViewCart;
+    private ImageView carticon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +53,35 @@ public class WelcomeScreenActivity extends BaseActivity implements View.OnClickL
             }
         });
 
+        buttonViewWishlist=findViewById(R.id.buttonViewWishlist);
+        buttonViewWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("buttonViewWishlist","buttonViewWishlist");
+                Intent intent = new Intent();
+                intent.setClass(WelcomeScreenActivity.this,WishListActivity.class);
+                startActivity(intent);
+            }
+        });
+
         buttonViewCart=findViewById(R.id.buttonViewCart);
         buttonViewCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("buttonViewCart","buttonViewCart");
                 Intent intent = new Intent();
-                intent.setClass(WelcomeScreenActivity.this,WishListActivity.class);
+                intent.setClass(WelcomeScreenActivity.this,CartListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        carticon = (ImageView) findViewById(R.id.cartIcon);
+        carticon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("carticon","carticon");
+                Intent intent = new Intent();
+                intent.setClass(WelcomeScreenActivity.this,CartListActivity.class);
                 startActivity(intent);
             }
         });

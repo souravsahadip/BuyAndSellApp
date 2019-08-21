@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-public class WishListActivity extends AppCompatActivity implements View.OnClickListener {
+public class WishListActivity extends BaseActivity implements View.OnClickListener {
 
     private DatabaseReference mRef;
     ListView listView;
@@ -42,7 +44,10 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cartlist);
+        setContentView(R.layout.activity_wishlist);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference().child("Cart");
         recyclerView = findViewById(R.id.cartListView);
@@ -53,18 +58,11 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
 
     private void fetch() {
         Query query = FirebaseDatabase.getInstance().getReference()
-                .child("Cart")
+                .child("Wishlist")
                 .child(FirebaseAuth.getInstance().getUid());
 
         Log.d("fetch", "fetch");
-        /*ObservableSnapshotArray<String> snaps=new ObservableSnapshotArray<String>() {
-            @NonNull
-            @Override
-            protected List<DataSnapshot> getSnapshots() {
-                return null;
-            }
-        };*/
-        //Iterable<DataSnapshot> contactChildren = contactSnapshot.getChildren();
+
         FirebaseRecyclerOptions<String> options =
                 new FirebaseRecyclerOptions.Builder<String>()
                         .setQuery(query, String.class)
@@ -118,43 +116,21 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
                         });
 
 
-                /*FirebaseDatabase.getInstance().getReference().child("Product").
-                        child(model).child("productName").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        try {
-                            if (snapshot.getValue() != null) {
-                                try {
-                                    Log.e("productName", "" + snapshot.getValue()); // your name values you will get here
-                                    productName = snapshot.getValue().toString();
-                                    holder.setTxtTitle(productName);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                Log.e("TAG", " it's null.");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError firebaseError) {
-                        Log.e("onCancelled", " cancelled");
-                    }
-                });
-                */
 
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //  Toast.makeText(ProductListActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                         //+adapter.getRef(1)
-                        //Intent intent = new Intent();
-                        //intent.setClass(CartListActivity.this, ProductViewActivity.class);
-                        //intent.putExtra("productID",adapter.getRef(holder.getAdapterPosition()).toString());
-                        //startActivity(intent);
+                        Intent intent = new Intent();
+                        intent.setClass(WishListActivity.this, ProductViewActivity.class);
+                        String cartRef=adapter.getRef(holder.getAdapterPosition()).toString();
+                        String[] refs=cartRef.split("/");
+                        Log.d("prodRef",refs[refs.length-1]);
+                        DatabaseReference prodRef=FirebaseDatabase.getInstance().getReference()
+                                .child("Product").child(refs[refs.length-1]);
+                        intent.putExtra("productID",prodRef.toString());                        startActivity(intent);
                     }
                 });
 
@@ -208,24 +184,24 @@ public class WishListActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
         intent.setClass(WishListActivity.this, WelcomeScreenActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        return true;
     }
 }
